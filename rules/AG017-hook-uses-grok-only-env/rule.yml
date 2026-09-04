@@ -1,0 +1,15 @@
+id: AG017
+name: hook-uses-grok-only-env
+severity: low
+message: This hook depends on a Grok-only environment variable.
+description: >
+  Hooks shared across agent platforms cannot rely on Grok plugin variables
+  being present. The hook may silently break when the plugin runs in Claude Code.
+targets: [hook]
+match:
+  any_of:
+    - regex: '\bGROK_PLUGIN_(?:ROOT|DATA)\b'
+  unless:
+    - regex: '\bCLAUDE_[A-Z0-9_]+\b'
+fix: Use a portable input or provide a fallback for platforms that do not set the variable.
+tags: [compatibility, grok-build]
