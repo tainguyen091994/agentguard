@@ -56,7 +56,7 @@ runs:
         args+=("--no-color")
         if [ -n "${{ inputs.disable }}" ]; then args+=("--disable" "${{ inputs.disable }}"); fi
         if [ "${{ inputs.all }}" = "true" ]; then args+=("--all"); fi
-        npx --yes "agentguard@${{ inputs.version }}" "${args[@]}"
+        npx --yes "@hachiman94/agentguard@${{ inputs.version }}" "${args[@]}"
 
     - name: Upload SARIF
       if: ${{ always() && inputs.upload-sarif == 'true' }}

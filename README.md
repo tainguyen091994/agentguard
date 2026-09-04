@@ -40,10 +40,17 @@ npm install && npm run build
 node dist/cli.js scan /path/to/a/repo
 ```
 
-From npm, once v0.1.0 is published:
+From npm:
 
 ```bash
-npx agentguard scan .
+npx @hachiman94/agentguard scan .
+```
+
+The unscoped name is blocked by npm's similarity filter, so the package is scoped. The command it installs is still `agentguard`:
+
+```bash
+npm install -g @hachiman94/agentguard
+agentguard scan .
 ```
 
 ## Usage
