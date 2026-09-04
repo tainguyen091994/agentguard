@@ -54,13 +54,18 @@ jobs:
   action:
     runs-on: ubuntu-latest
     steps:
+      # Checked out into a subdirectory on purpose. npx runs from the workspace
+      # root, and if a package.json with this package's own name sits there, npx
+      # treats the package as already installed and never fetches it.
       - uses: actions/checkout@v4
+        with:
+          path: repo
       - name: Run the composite action against the unsafe example
         id: scan
         continue-on-error: true
-        uses: ./
+        uses: ./repo
         with:
-          path: examples/vulnerable-plugin
+          path: repo/examples/vulnerable-plugin
           upload-sarif: "false"
       - name: The action must fail and must leave a SARIF report
         run: |
