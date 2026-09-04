@@ -1,0 +1,7 @@
+{
+  "name": "example-plugin",
+  "dependencies": {
+    "helper": "2.4.1"
+  },
+  "repository": "https://github.com/example/example-plugin"
+}

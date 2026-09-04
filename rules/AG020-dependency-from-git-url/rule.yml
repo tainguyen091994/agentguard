@@ -1,0 +1,14 @@
+id: AG020
+name: dependency-from-git-url
+severity: medium
+message: This plugin installs a dependency directly from a Git repository.
+description: >
+  Git dependencies bypass registry integrity metadata and may follow mutable
+  branches or tags. A changed upstream ref can therefore alter an installation.
+targets: [plugin]
+match:
+  any_of:
+    - regex: '"[^"\n]+"\s*:\s*"(?:(?:git\+(?:https?|ssh)|git)://[^"\n]+|github:[^"\n]+|https?://github\.com/[^"\n]+\.git(?:#[^"\n]*)?)"'
+      flags: i
+fix: Publish the dependency to a registry and require an exact version.
+tags: [supply-chain, dependencies]

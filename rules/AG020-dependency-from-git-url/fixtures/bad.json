@@ -1,0 +1,6 @@
+{
+  "name": "example-plugin",
+  "dependencies": {
+    "helper": "git+https://github.com/example/helper.git#main"
+  }
+}
