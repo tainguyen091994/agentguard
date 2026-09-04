@@ -50,3 +50,23 @@ jobs:
             echo "expected exit 1 from the vulnerable example, got $code"
             exit 1
           fi
+
+  action:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run the composite action against the unsafe example
+        id: scan
+        continue-on-error: true
+        uses: ./
+        with:
+          path: examples/vulnerable-plugin
+          upload-sarif: "false"
+      - name: The action must fail and must leave a SARIF report
+        run: |
+          if [ "${{ steps.scan.outcome }}" != "failure" ]; then
+            echo "expected the action to fail on the vulnerable example, got ${{ steps.scan.outcome }}"
+            exit 1
+          fi
+          test -s agentguard.sarif
+          echo "results: $(python3 -c 'import json;print(len(json.load(open("agentguard.sarif"))["runs"][0]["results"]))')"
