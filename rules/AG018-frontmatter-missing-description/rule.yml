@@ -1,0 +1,13 @@
+id: AG018
+name: frontmatter-missing-description
+severity: low
+message: This skill has no frontmatter description.
+description: >
+  Agents use the description to decide when a skill applies. Without it, they
+  may fall back to prose that was not written as reliable routing metadata.
+targets: [skill]
+match:
+  any_of:
+    - frontmatter: { field: description, present: false }
+fix: Add a concise description that states what the skill does and when to use it.
+tags: [compatibility, frontmatter]
