@@ -1,0 +1,16 @@
+id: AG011
+name: mcp-shell-wrapped-command
+severity: medium
+message: This MCP server starts through a shell interpreter instead of running a binary.
+description: >
+  Launching a server as "bash -c ..." hides what actually runs, defeats
+  argument quoting and makes review harder. Point the command at the
+  executable and pass arguments as an array.
+targets: [mcp, settings]
+match:
+  any_of:
+    - json:
+        path: mcpServers.*.command
+        regex: '^(?:bash|sh|zsh|dash|cmd|cmd\.exe|powershell|powershell\.exe|pwsh)$'
+fix: Set command to the real executable and put its arguments in "args".
+tags: [hardening]

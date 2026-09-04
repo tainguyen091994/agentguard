@@ -1,0 +1,65 @@
+name: agentguard
+description: Scan AI coding agent extensions (skills, plugins, hooks, MCP servers) for unsafe patterns.
+branding:
+  icon: shield
+  color: purple
+
+inputs:
+  path:
+    description: Directory or file to scan.
+    required: false
+    default: "."
+  min-severity:
+    description: Fail the job at this severity or above (critical, high, medium, low, info).
+    required: false
+    default: high
+  disable:
+    description: Comma-separated rule ids to skip.
+    required: false
+    default: ""
+  all:
+    description: Scan every file, not only known extension paths.
+    required: false
+    default: "false"
+  sarif-file:
+    description: Where to write the SARIF report.
+    required: false
+    default: agentguard.sarif
+  upload-sarif:
+    description: Upload the SARIF report to GitHub code scanning.
+    required: false
+    default: "true"
+  version:
+    description: agentguard version to run. Pinned on purpose. See rule AG009.
+    required: false
+    default: "0.1.0"
+
+outputs:
+  sarif-file:
+    description: Path to the SARIF report.
+    value: ${{ inputs.sarif-file }}
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: "20"
+
+    - name: Run agentguard
+      shell: bash
+      run: |
+        args=("scan" "${{ inputs.path }}")
+        args+=("--sarif" "${{ inputs.sarif-file }}")
+        args+=("--min-severity" "${{ inputs.min-severity }}")
+        args+=("--no-color")
+        if [ -n "${{ inputs.disable }}" ]; then args+=("--disable" "${{ inputs.disable }}"); fi
+        if [ "${{ inputs.all }}" = "true" ]; then args+=("--all"); fi
+        npx --yes "agentguard@${{ inputs.version }}" "${args[@]}"
+
+    - name: Upload SARIF
+      if: ${{ always() && inputs.upload-sarif == 'true' }}
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: ${{ inputs.sarif-file }}

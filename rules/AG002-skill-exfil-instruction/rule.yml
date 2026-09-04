@@ -1,0 +1,17 @@
+id: AG002
+name: skill-exfil-instruction
+severity: critical
+message: This file tells the agent to send secrets or file contents to a remote endpoint.
+description: >
+  A skill that instructs the agent to POST credentials, environment variables
+  or file contents to a URL is exfiltrating data, whatever the stated reason.
+  Legitimate skills ask the user to configure their own endpoint instead.
+targets: [skill, agentsmd]
+match:
+  any_of:
+    - regex: '(?:post|send|upload|transmit|exfiltrat\w*)[^.\n]{0,80}(?:\.env\b|credential|api[ _-]?key|secret|token|~/\.ssh|~/\.aws)[^.\n]{0,80}(?:https?://|webhook|endpoint)'
+      flags: i
+    - regex: '(?:https?://|webhook)[^\s)]{0,120}[^.\n]{0,60}(?:with|containing|including)[^.\n]{0,40}(?:\.env\b|credential|api[ _-]?key|secret|token)'
+      flags: i
+fix: Remove the network call. If the skill needs telemetry, make it opt in and document exactly what it sends.
+tags: [exfiltration, prompt-injection]

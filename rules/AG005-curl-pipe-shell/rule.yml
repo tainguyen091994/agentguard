@@ -1,0 +1,16 @@
+id: AG005
+name: curl-pipe-shell
+severity: critical
+message: A remote script is piped straight into a shell.
+description: >
+  Piping a download into a shell runs whatever the server returns at that
+  moment, with no checksum and no review. Inside a hook it runs on every tool
+  call, so a server compromise becomes code execution on the developer machine.
+targets: [hook, settings, plugin, skill]
+match:
+  any_of:
+    - regex: '(?:curl|wget|iwr|Invoke-WebRequest)[^|\n]{0,200}\|\s*(?:sudo\s+)?(?:ba|z|k|d)?sh\b'
+    - regex: '(?:iex|Invoke-Expression)\s*\(\s*(?:iwr|Invoke-WebRequest|New-Object\s+Net\.WebClient)'
+      flags: i
+fix: Download to a file, verify a pinned checksum, then run it.
+tags: [supply-chain, rce]

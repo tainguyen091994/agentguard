@@ -1,0 +1,4 @@
+# Paths agentguard skips. One glob per line.
+# Fixtures are deliberately unsafe.
+rules/**
+examples/**

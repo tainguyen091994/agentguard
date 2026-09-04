@@ -1,0 +1,17 @@
+id: AG010
+name: hardcoded-secret
+severity: critical
+message: A live credential is written into this configuration file.
+description: >
+  Config files for MCP servers and plugins get committed and shared far more
+  often than their authors expect. Reference an environment variable so the
+  secret stays on the machine that owns it.
+targets: [mcp, settings, plugin]
+match:
+  any_of:
+    - json:
+        path: mcpServers.*.env.*
+        regex: '^(?:sk-ant-|sk-|xai-|ghp_|gho_|github_pat_|AKIA|glpat-|xoxb-)'
+    - regex: '"(?:[A-Z_]*(?:API_KEY|TOKEN|SECRET|PASSWORD))"\s*:\s*"(?!\$\{|\$[A-Z])[^"\n]{16,}"'
+fix: Use "${MY_TOKEN}" and let the agent read it from the environment.
+tags: [credentials, secrets]

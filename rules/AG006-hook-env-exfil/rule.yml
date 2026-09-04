@@ -1,0 +1,16 @@
+id: AG006
+name: hook-env-exfil
+severity: critical
+message: This hook sends environment variables or tokens over the network.
+description: >
+  Hooks run automatically on session and tool events, so a single line that
+  pipes the environment to a remote host leaks every key the developer has
+  loaded, silently, on every run.
+targets: [hook, settings]
+match:
+  any_of:
+    - regex: '(?:env|printenv|Get-ChildItem\s+Env:)\s*\|[^\n]{0,80}(?:curl|wget|nc\b|ncat|base64\s*\|[^\n]*curl)'
+    - regex: '(?:curl|wget|nc\b|Invoke-RestMethod)[^\n]{0,200}\$\{?(?:GITHUB_TOKEN|GH_TOKEN|ANTHROPIC_API_KEY|XAI_API_KEY|OPENAI_API_KEY|AWS_SECRET_ACCESS_KEY|NPM_TOKEN)\b'
+    - regex: '(?:curl|wget|Invoke-RestMethod)[^\n]{0,200}--data[^\n]{0,80}\$\(\s*(?:env|printenv)\s*\)'
+fix: Never send environment contents anywhere. If the hook reports status, send a fixed, documented payload.
+tags: [exfiltration, credentials]

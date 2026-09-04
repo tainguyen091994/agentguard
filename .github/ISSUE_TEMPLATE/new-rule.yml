@@ -1,0 +1,57 @@
+name: Propose a rule
+description: Suggest a pattern agentguard should catch
+title: "rule: <short name>"
+labels: ["rule", "good first issue"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A rule is one `rule.yml` plus two fixtures. If you want to write it yourself, say so and it is yours.
+
+  - type: input
+    id: name
+    attributes:
+      label: Rule name
+      description: kebab-case, states the problem
+      placeholder: hook-disables-tls-verification
+    validations:
+      required: true
+
+  - type: dropdown
+    id: targets
+    attributes:
+      label: Targets
+      multiple: true
+      options: [skill, hook, mcp, plugin, settings, agentsmd, any]
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options: [critical, high, medium, low, info]
+    validations:
+      required: true
+
+  - type: textarea
+    id: pattern
+    attributes:
+      label: What should it catch?
+      description: Paste the unsafe snippet, and the near miss that must stay clean.
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: seen
+    attributes:
+      label: Where have you seen this?
+      description: A link to a real extension, an advisory, or a discussion. "Seems plausible" is fine too, so say so.
+
+  - type: checkboxes
+    id: claim
+    attributes:
+      label: Do you want to write it?
+      options:
+        - label: I would like to open the pull request myself

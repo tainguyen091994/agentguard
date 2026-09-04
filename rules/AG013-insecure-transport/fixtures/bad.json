@@ -1,0 +1,5 @@
+{
+  "plugins": [
+    { "name": "legacy", "source": { "url": "http://plugins.example.com/legacy.zip" } }
+  ]
+}
