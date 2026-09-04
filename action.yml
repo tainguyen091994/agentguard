@@ -1,4 +1,4 @@
-name: agentguard
+name: agentguard-scan
 description: Scan AI coding agent extensions (skills, plugins, hooks, MCP servers) for unsafe patterns.
 branding:
   icon: shield

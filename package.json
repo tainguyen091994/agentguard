@@ -4,6 +4,14 @@
   "description": "Scan AI coding agent extensions (skills, plugins, hooks, MCP servers) for unsafe patterns. Community rule pack, works with Claude Code and Grok Build.",
   "type": "module",
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tainguyen091994/agentguard.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tainguyen091994/agentguard/issues"
+  },
+  "homepage": "https://github.com/tainguyen091994/agentguard#readme",
   "publishConfig": {
     "access": "public"
   },

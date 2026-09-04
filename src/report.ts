@@ -76,7 +76,7 @@ export function sarifReport(findings: Finding[], rules: Rule[], version: string)
           driver: {
             name: "agentguard",
             version,
-            informationUri: "https://github.com/agentguard/agentguard",
+            informationUri: "https://github.com/tainguyen091994/agentguard",
             rules: used.map((rule) => ({
               id: rule.id,
               name: rule.name,

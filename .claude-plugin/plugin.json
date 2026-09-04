@@ -2,8 +2,17 @@
   "name": "agentguard",
   "version": "0.1.0",
   "description": "Scan agent extensions (skills, plugins, hooks, MCP servers) for unsafe patterns before you install them.",
-  "homepage": "https://github.com/agentguard/agentguard",
+  "homepage": "https://github.com/tainguyen091994/agentguard",
   "license": "Apache-2.0",
-  "keywords": ["security", "skills", "plugins", "mcp", "hooks", "supply-chain"],
-  "skills": ["./skills/agentguard-review"]
+  "keywords": [
+    "security",
+    "skills",
+    "plugins",
+    "mcp",
+    "hooks",
+    "supply-chain"
+  ],
+  "skills": [
+    "./skills/agentguard-review"
+  ]
 }

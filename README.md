@@ -83,7 +83,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: agentguard/agentguard@v0
+      - uses: tainguyen091994/agentguard@v0.1.0
         with:
           path: .
           min-severity: high
