@@ -1,0 +1,55 @@
+{
+  "name": "@hachiman94/agentguard",
+  "version": "0.1.0",
+  "description": "Scan AI coding agent extensions (skills, plugins, hooks, MCP servers) for unsafe patterns. Community rule pack, works with Claude Code and Grok Build.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tainguyen091994/agentguard.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tainguyen091994/agentguard/issues"
+  },
+  "homepage": "https://github.com/tainguyen091994/agentguard#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "bin": {
+    "agentguard": "dist/cli.js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "engines": {
+    "node": ">=20"
+  },
+  "files": [
+    "dist",
+    "rules",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "npm run build && node dist/cli.js test",
+    "scan": "npm run build && node dist/cli.js scan",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "claude-code",
+    "grok-build",
+    "agent-skills",
+    "mcp",
+    "security",
+    "sast",
+    "prompt-injection",
+    "supply-chain"
+  ],
+  "dependencies": {
+    "yaml": "^2.5.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.4",
+    "typescript": "^5.6.2"
+  }
+}

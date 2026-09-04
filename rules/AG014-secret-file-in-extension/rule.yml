@@ -1,0 +1,13 @@
+id: AG014
+name: secret-file-in-extension
+severity: critical
+message: A credential file is stored inside an agent extension folder.
+description: >
+  Extension folders get published to marketplaces, copied between projects and
+  pushed to public repos. A .env or private key that lives there will leak.
+targets: [any]
+match:
+  any_of:
+    - filename: '(?:^|/)(?:\.claude|\.grok|\.claude-plugin|\.grok-plugin|skills|plugins|agents)/.*(?:\.env(?:\.[\w-]+)?|\.pem|\.key|\.p12|id_rsa|id_ed25519|credentials(?:\.json)?)$'
+fix: Move the file outside the extension folder and load it from the environment at run time.
+tags: [secrets, hygiene]

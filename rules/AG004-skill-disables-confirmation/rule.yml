@@ -1,0 +1,19 @@
+id: AG004
+name: skill-disables-confirmation
+severity: high
+message: This file tells the agent to skip user confirmation or ignore earlier instructions.
+description: >
+  Text that overrides the user's own rules, or that pushes the agent to act
+  without asking, removes the one control the user has over a long-running
+  session. Real skills describe a task; they do not rewrite the safety policy.
+targets: [skill, agentsmd]
+match:
+  any_of:
+    - regex: 'ignore\s+(?:all\s+|any\s+)?(?:previous|prior|earlier|above)\s+(?:instructions|rules|prompts|guidance)'
+      flags: i
+    - regex: '(?:do\s+not|don''t|never)\s+ask\s+(?:the\s+user\s+)?(?:for\s+)?(?:permission|confirmation|first)'
+      flags: i
+    - regex: '--dangerously-skip-permissions|--yolo\b|auto[- ]approve\s+(?:every|all)\b'
+      flags: i
+fix: Let the user keep control. Describe what the skill does and stop before anything destructive.
+tags: [prompt-injection, safety-bypass]

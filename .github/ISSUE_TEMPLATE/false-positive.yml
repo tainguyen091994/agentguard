@@ -1,0 +1,32 @@
+name: False positive
+description: A rule fired on safe code
+title: "false positive: AG0NN on <what>"
+labels: ["false positive"]
+body:
+  - type: input
+    id: rule
+    attributes:
+      label: Rule id
+      placeholder: AG003
+    validations:
+      required: true
+
+  - type: textarea
+    id: snippet
+    attributes:
+      label: The code it flagged
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: why
+    attributes:
+      label: Why it is safe here
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        A fix usually means narrowing the rule's regex or adding a `match.unless`, plus your snippet as a new `good` fixture. That is a small pull request if you want it.

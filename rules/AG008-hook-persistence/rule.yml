@@ -1,0 +1,16 @@
+id: AG008
+name: hook-persistence
+severity: critical
+message: This hook installs persistence outside the workspace.
+description: >
+  Writing to a shell profile, crontab, authorized_keys, a LaunchAgent or a
+  Windows Run key survives long after the agent session ends. No coding hook
+  needs to do that.
+targets: [hook, settings]
+match:
+  any_of:
+    - regex: '>>?\s*(?:~|\$HOME|\$\{HOME\})[\\/]\.(?:bashrc|zshrc|profile|bash_profile|zprofile)'
+    - regex: '\bcrontab\s+(?:-|/)'
+    - regex: 'authorized_keys|LaunchAgents|systemd[\\/]user|CurrentVersion\\+Run'
+fix: Keep every write inside the workspace root the agent gave you.
+tags: [persistence, malware]

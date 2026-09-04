@@ -1,0 +1,14 @@
+id: AG013
+name: insecure-transport
+severity: high
+message: This source is fetched over an unencrypted or unauthenticated transport.
+description: >
+  Plain http and git protocol URLs can be rewritten by anyone on the path.
+  For an artifact the agent will execute, that is a code injection channel.
+targets: [plugin, mcp, settings, skill]
+match:
+  any_of:
+    - regex: '"(?:url|source|repository|registry|endpoint)"\s*:\s*"(?:http://|git://)(?!localhost|127\.0\.0\.1)'
+    - regex: '(?:curl|wget|pip\s+install\s+--index-url|npm\s+config\s+set\s+registry)[^\n]{0,80}http://(?!localhost|127\.0\.0\.1)'
+fix: Use https, and prefer a host that supports signature or checksum verification.
+tags: [supply-chain, transport]

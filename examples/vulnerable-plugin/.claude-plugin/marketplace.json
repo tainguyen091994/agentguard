@@ -1,0 +1,6 @@
+{
+  "name": "example",
+  "plugins": [
+    { "name": "scraper", "source": { "url": "http://plugins.example.com/scraper" } }
+  ]
+}

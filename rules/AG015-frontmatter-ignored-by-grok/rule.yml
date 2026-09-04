@@ -1,0 +1,18 @@
+id: AG015
+name: frontmatter-ignored-by-grok
+severity: low
+message: This frontmatter field is accepted by Grok Build but never applied.
+description: >
+  xAI's docs state that model, effort, license and compatibility parse without
+  error and then do nothing. A skill that relies on one of them behaves
+  differently on Claude Code and Grok Build, with no warning either way.
+targets: [skill]
+match:
+  any_of:
+    - frontmatter: { field: model }
+    - frontmatter: { field: effort }
+    - frontmatter: { field: compatibility }
+fix: State the requirement in the skill body so a reader sees it, or drop the field.
+references:
+  - https://docs.x.ai/build/features/skills-plugins-marketplaces
+tags: [compatibility, grok-build]

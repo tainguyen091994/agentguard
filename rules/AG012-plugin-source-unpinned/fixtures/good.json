@@ -1,0 +1,12 @@
+{
+  "name": "example-marketplace",
+  "plugins": [
+    {
+      "name": "formatter",
+      "source": {
+        "url": "https://github.com/example/formatter",
+        "sha": "9f1c2b7d4a6e8f0c1b2d3e4f5a6b7c8d9e0f1a2b"
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+id: AG009
+name: mcp-unpinned-package
+severity: medium
+message: This MCP server runs an unpinned package, so its code can change under you.
+description: >
+  npx, uvx and bunx fetch the newest published version at launch. A registry
+  account takeover then reaches every machine that starts the server. Pin an
+  exact version and bump it deliberately.
+targets: [mcp, settings]
+match:
+  any_of:
+    - regex: '"[^"\n]+@latest"'
+    - regex: '"(?:npx|uvx|bunx)"[\s\S]{0,200}?"(?:-y|--yes)"\s*,\s*"(?![^"]*@\d)[^"]+"'
+fix: Pin the exact version, for example "@modelcontextprotocol/server-github@1.4.2".
+references:
+  - https://github.com/xai-org/plugin-marketplace
+tags: [supply-chain, pinning]

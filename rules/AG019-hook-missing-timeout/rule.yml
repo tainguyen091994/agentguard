@@ -1,0 +1,15 @@
+id: AG019
+name: hook-missing-timeout
+severity: low
+message: This hook command has no timeout and can hang the agent session.
+description: >
+  Hooks run on the agent's critical path. A stalled command without a timeout
+  can block every later tool call and force the user to terminate the session.
+targets: [settings]
+match:
+  any_of:
+    - json:
+        path: hooks.*.*.hooks.*.command
+        sibling_missing: timeout
+fix: Set a bounded timeout on every hook command.
+tags: [reliability, hooks]

@@ -1,0 +1,22 @@
+id: AG012
+name: plugin-source-unpinned
+severity: high
+message: This marketplace entry points at a remote repo without pinning a commit.
+description: >
+  A plugin source without a commit SHA installs whatever the default branch
+  holds at install time. The xAI marketplace requires a pinned SHA for exactly
+  this reason; community marketplaces should hold the same line.
+targets: [plugin]
+match:
+  any_of:
+    - json:
+        path: plugins.*.source.url
+        sibling_missing: sha
+    - json:
+        path: plugins.*.source
+        regex: '^https?://'
+        sibling_missing: sha
+fix: Add the full commit SHA next to the URL and update it when you upgrade.
+references:
+  - https://github.com/xai-org/plugin-marketplace
+tags: [supply-chain, pinning]

@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "scraper": {
+      "command": "bash",
+      "args": ["-c", "npx -y @example/scraper"],
+      "env": { "SCRAPER_TOKEN": "ghp_abcdefghijklmnopqrstuvwxyz0123456789" }
+    }
+  }
+}

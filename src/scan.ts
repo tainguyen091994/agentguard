@@ -1,0 +1,138 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+import { discover, type DiscoverOptions } from "./discover.js";
+import { runMatcher } from "./match.js";
+import type { Finding, Rule, ScanTarget } from "./types.js";
+
+export interface ScanOptions extends DiscoverOptions {
+  rules: Rule[];
+  /** Rule ids to skip entirely. */
+  disable?: string[];
+}
+
+export function scan(root: string, options: ScanOptions): Finding[] {
+  const targets = discover(root, { all: options.all });
+  const ignore = loadIgnoreFile(root);
+  const disabled = new Set(options.disable ?? []);
+  const findings: Finding[] = [];
+
+  for (const target of targets) {
+    if (ignore.some((pattern) => pattern.test(target.relPath))) continue;
+    for (const rule of options.rules) {
+      if (disabled.has(rule.id)) continue;
+      findings.push(...applyRule(rule, target));
+    }
+  }
+
+  return findings.sort(
+    (a, b) => a.file.localeCompare(b.file) || a.line - b.line || a.ruleId.localeCompare(b.ruleId),
+  );
+}
+
+export function applyRule(rule: Rule, target: ScanTarget): Finding[] {
+  if (!rule.targets.includes("any") && !rule.targets.includes(target.kind)) return [];
+
+  const suppression = readSuppressions(target.content);
+  if (suppression.file.has(rule.id) || suppression.file.has("*")) return [];
+
+  const excluded = (rule.match.unless ?? []).some(
+    (matcher) => runMatcher(matcher, target).length > 0,
+  );
+  if (excluded) return [];
+
+  const findings: Finding[] = [];
+  const seen = new Set<number>();
+
+  for (const matcher of rule.match.any_of) {
+    for (const hit of runMatcher(matcher, target)) {
+      if (seen.has(hit.line)) continue;
+      const onLine = suppression.lines.get(hit.line);
+      if (onLine && (onLine.has(rule.id) || onLine.has("*"))) continue;
+      seen.add(hit.line);
+      findings.push({
+        ruleId: rule.id,
+        ruleName: rule.name,
+        severity: rule.severity,
+        message: rule.message,
+        file: target.relPath,
+        line: hit.line,
+        column: hit.column,
+        snippet: hit.snippet,
+        fix: rule.fix,
+        references: rule.references,
+      });
+    }
+  }
+  return findings;
+}
+
+interface Suppressions {
+  /** Rule ids suppressed for the whole file. `*` means all rules. */
+  file: Set<string>;
+  /** Line number -> rule ids suppressed on that line. */
+  lines: Map<number, Set<string>>;
+}
+
+/**
+ * Supports two comment forms, in any comment syntax:
+ *   agentguard-disable-file AG001
+ *   agentguard-disable-next-line AG001 AG002
+ * Listing no rule id suppresses every rule.
+ */
+export function readSuppressions(content: string): Suppressions {
+  const result: Suppressions = { file: new Set(), lines: new Map() };
+  const lines = content.split("\n");
+
+  lines.forEach((text, index) => {
+    const fileMatch = /agentguard-disable-file([^\n]*)/.exec(text);
+    if (fileMatch) {
+      for (const id of parseIds(fileMatch[1])) result.file.add(id);
+    }
+    const lineMatch = /agentguard-disable-next-line([^\n]*)/.exec(text);
+    if (lineMatch) {
+      result.lines.set(index + 2, new Set(parseIds(lineMatch[1])));
+    }
+  });
+
+  return result;
+}
+
+function parseIds(tail: string): string[] {
+  const ids = tail.match(/AG\d{3,}/g);
+  return ids && ids.length > 0 ? ids : ["*"];
+}
+
+function loadIgnoreFile(root: string): RegExp[] {
+  let raw: string;
+  try {
+    raw = readFileSync(join(root, ".agentguardignore"), "utf8");
+  } catch {
+    return [];
+  }
+  return raw
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line && !line.startsWith("#"))
+    .map(globToRegExp);
+}
+
+function globToRegExp(glob: string): RegExp {
+  let pattern = "";
+  for (let i = 0; i < glob.length; i += 1) {
+    const char = glob[i];
+    if (char === "*" && glob[i + 1] === "*") {
+      pattern += ".*";
+      i += 1;
+      if (glob[i + 1] === "/") i += 1;
+    } else if (char === "*") {
+      pattern += "[^/]*";
+    } else if (char === "?") {
+      pattern += ".";
+    } else if (".+^${}()|[]\\".includes(char)) {
+      pattern += "\\" + char;
+    } else {
+      pattern += char;
+    }
+  }
+  return new RegExp(`^${pattern}$`);
+}

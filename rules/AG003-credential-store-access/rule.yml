@@ -1,0 +1,16 @@
+id: AG003
+name: credential-store-access
+severity: high
+message: This extension reaches into a credential store outside the workspace.
+description: >
+  Agent extensions should stay inside the workspace. Reading ~/.ssh, ~/.aws,
+  the macOS keychain or a browser profile is a strong signal of credential
+  harvesting, and it is almost never needed by a coding skill.
+targets: [skill, agentsmd, hook, settings]
+match:
+  any_of:
+    - regex: '(?:~|\$HOME|\$\{HOME\}|%USERPROFILE%)[\\/]\.(?:ssh|aws|gnupg|kube|docker|azure|config[\\/]gcloud)\b'
+    - regex: 'security\s+find-(?:generic|internet)-password'
+    - regex: '(?:~|\$HOME)[\\/]\.(?:npmrc|pypirc|netrc|git-credentials)\b'
+fix: Read credentials from environment variables the user set, or ask the user to pass a path explicitly.
+tags: [credentials, exfiltration]

@@ -1,0 +1,17 @@
+id: AG007
+name: hook-evaluates-input
+severity: high
+message: This hook evaluates data it was handed as shell or script code.
+description: >
+  Hook payloads carry model output, file paths and tool arguments. Passing any
+  of it to eval or Invoke-Expression turns attacker-controlled text into
+  commands. Parse the payload instead, with jq or a JSON library.
+targets: [hook, settings]
+match:
+  any_of:
+    - regex: 'eval\s+"?\$(?:\(|\{?(?:CLAUDE|GROK|AGENT)_)'
+    - regex: 'Invoke-Expression\s+\$'
+    - regex: '\beval\s*\(\s*(?:payload|input|args|data|json)\b'
+      flags: i
+fix: Parse the payload with jq or a JSON library and branch on the parsed values.
+tags: [rce, injection]

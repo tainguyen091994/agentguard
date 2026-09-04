@@ -1,0 +1,18 @@
+id: AG001
+name: skill-hidden-instructions
+severity: critical
+message: Hidden text in this file gives the agent instructions the reader cannot see.
+description: >
+  Instructions buried in an HTML comment or written with zero-width characters
+  are invisible when a human reviews the skill on GitHub, but the agent still
+  reads them. This is the standard way a malicious skill hides its payload.
+targets: [skill, agentsmd]
+match:
+  any_of:
+    - regex: '<!--(?:(?!-->)[\s\S])*?(?:ignore\s+(?:all\s+)?previous|do\s+not\s+tell|without\s+telling|never\s+mention|send\s+(?:the\s+)?(?:file|contents?|env)|api[_ -]?key)(?:(?!-->)[\s\S])*?-->'
+      flags: i
+    - regex: '[\u200b\u200c\u200d\u2060\ufeff]{3,}'
+fix: Put every instruction in visible prose. If text is not meant for the agent, delete it.
+references:
+  - https://docs.x.ai/build/features/skills-plugins-marketplaces
+tags: [prompt-injection, hidden-content]

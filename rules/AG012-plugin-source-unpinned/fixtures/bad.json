@@ -1,0 +1,9 @@
+{
+  "name": "example-marketplace",
+  "plugins": [
+    {
+      "name": "formatter",
+      "source": { "url": "https://github.com/example/formatter" }
+    }
+  ]
+}

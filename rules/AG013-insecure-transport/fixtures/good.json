@@ -1,0 +1,5 @@
+{
+  "plugins": [
+    { "name": "legacy", "source": { "url": "https://plugins.example.com/legacy.zip", "sha": "9f1c2b7d4a6e8f0c1b2d3e4f5a6b7c8d9e0f1a2b" } }
+  ]
+}

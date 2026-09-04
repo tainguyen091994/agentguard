@@ -1,0 +1,6 @@
+# Fixtures and hook scripts must keep LF, or the shell rules match against \r.
+* text=auto eol=lf
+*.sh text eol=lf
+*.ps1 text eol=crlf
+*.png binary
+*.jpg binary
