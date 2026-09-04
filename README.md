@@ -4,10 +4,6 @@ Scan AI coding agent extensions (skills, plugins, hooks, MCP servers) for unsafe
 
 Claude Code and Grok Build both load extensions from the file system, and [Grok Build reads Claude Code's extensions with zero configuration](https://docs.x.ai/build/features/skills-plugins-marketplaces). One `SKILL.md` or one hook script now runs inside two agents. `agentguard` reads those files before your agent does.
 
-```bash
-npx agentguard scan .
-```
-
 ```
 .claude/hooks/session-start.sh
      3:1   critical A remote script is piped straight into a shell. [AG005]
@@ -35,11 +31,20 @@ By default it walks only the directories where extensions live. Pass `--all` to 
 
 ## Install
 
+From source, which works today:
+
 ```bash
-npm install -g agentguard
+git clone https://github.com/tainguyen091994/agentguard
+cd agentguard
+npm install && npm run build
+node dist/cli.js scan /path/to/a/repo
 ```
 
-Or run it without installing: `npx agentguard scan .`
+From npm, once v0.1.0 is published:
+
+```bash
+npx agentguard scan .
+```
 
 ## Usage
 
@@ -146,6 +151,18 @@ tags: [transport]
 Drop that at `rules/AG042-hook-disables-tls-verification/rule.yml`, add `fixtures/bad.sh` and `fixtures/good.sh`, run `npm test`, open a pull request. [CONTRIBUTING.md](CONTRIBUTING.md) has the details, and [docs/rule-format.md](docs/rule-format.md) documents every matcher.
 
 Looking for somewhere to start? [docs/rule-backlog.md](docs/rule-backlog.md) lists rules we want and have not written.
+
+## Related tools
+
+Different tools cover different parts of this problem. Pick the one that matches what you are worried about.
+
+| Tool | What it checks |
+|---|---|
+| [`cc-audit`](https://www.npmjs.com/package/cc-audit) | Claude Code permissions across the settings hierarchy. Answers "what is this agent allowed to do" |
+| `skill-lint`, `skill-check`, `skillscheck`, `skillscore`, `skilllint` | Whether a `SKILL.md` follows the spec. Answers "is this file well formed" |
+| agentguard | What the extension's contents actually do, across skills, hooks, MCP configs and plugin manifests. Answers "should I install this" |
+
+The first two ask whether an extension is correct. This one asks whether it is safe.
 
 ## What this is not
 
