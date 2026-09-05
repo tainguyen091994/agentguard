@@ -1,6 +1,6 @@
 {
   "name": "@hachiman94/agentguard",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Scan AI coding agent extensions (skills, plugins, hooks, MCP servers) for unsafe patterns. Community rule pack, works with Claude Code and Grok Build.",
   "type": "module",
   "license": "Apache-2.0",
