@@ -1,0 +1,21 @@
+id: AG021
+name: mcp-absolute-user-path
+severity: low
+message: This MCP configuration uses a machine-specific user-home path.
+description: >
+  A command or argument under a particular user's home directory will fail on
+  every other machine. Use a project-relative path or an installed executable
+  instead of a path rooted in /Users/<name> or C:\\Users\\<name>.
+targets: [mcp, settings]
+match:
+  any_of:
+    - json:
+        path: mcpServers.*.command
+        regex: '^(?:[A-Za-z]:[\\/]+Users[\\/]+[^\\/]+|/Users/[^/]+)(?:[\\/]|$)'
+    - json:
+        path: mcpServers.*.args.*
+        regex: '^(?:[A-Za-z]:[\\/]+Users[\\/]+[^\\/]+|/Users/[^/]+)(?:[\\/]|$)'
+fix: Use a project-relative path or an executable installed for the current machine.
+references:
+  - https://github.com/tainguyen091994/agentguard/issues/34
+tags: [portability, mcp]
