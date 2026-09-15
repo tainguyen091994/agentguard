@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "windows-local": {
+      "command": "C:\\Users\\alice\\tools\\node.exe",
+      "args": ["C:\\Users\\alice\\projects\\metadata-mcp\\server.js"]
+    },
+    "macos-local": {
+      "command": "node",
+      "args": ["/Users/alice/projects/metadata-mcp/server.js"]
+    }
+  }
+}

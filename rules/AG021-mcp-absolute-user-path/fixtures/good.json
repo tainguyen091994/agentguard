@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "project-local": {
+      "command": "node",
+      "args": ["./tools/metadata-mcp/server.js", "--config", "C:\\ProgramData\\mcp\\settings.json"]
+    },
+    "managed-package": {
+      "command": "npx",
+      "args": ["--yes", "@example/metadata-mcp@1.2.3"]
+    }
+  }
+}
