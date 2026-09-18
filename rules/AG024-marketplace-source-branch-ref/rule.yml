@@ -1,0 +1,27 @@
+id: AG024
+name: marketplace-source-branch-ref
+severity: medium
+message: This plugin source uses a mutable branch or tag instead of a commit SHA.
+description: >
+  Branches and tags can be moved after a marketplace entry is reviewed, so a
+  later install may receive different code. Pin the source to an immutable
+  commit SHA and update it deliberately.
+targets: [plugin]
+match:
+  any_of:
+    - json:
+        path: plugins.*.source.ref
+        regex: '^(?![0-9a-f]{40}$).+'
+        flags: i
+    - json:
+        path: plugins.*.source.branch
+        regex: '.+'
+    - json:
+        path: plugins.*.source.tag
+        regex: '.+'
+    - json:
+        path: plugins.*.source.url
+        regex: '#(?![0-9a-f]{40}$)[^"\s]+$'
+        flags: i
+fix: Replace the branch or tag with the full 40-character commit SHA for the reviewed source.
+tags: [supply-chain, pinning, plugins]
