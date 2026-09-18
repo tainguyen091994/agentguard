@@ -1,0 +1,27 @@
+id: AG019
+name: typosquat-known-mcp-server
+severity: high
+message: This MCP package name resembles a known server but contains a likely typosquat.
+description: >
+  A package name that differs from a well-known MCP server by a small spelling
+  change can redirect an agent to an untrusted publisher. Verify the package
+  scope and name before installing it.
+targets: [mcp, settings]
+match:
+  any_of:
+    - json:
+        path: mcpServers.*.command
+        regex: '(?:@modelcontextprotcol|@modelcontextprotocolx)/server-(?:github|filesystem|memory|fetch|sequential-thinking)$'
+        flags: i
+    - json:
+        path: mcpServers.*.args.*
+        regex: '(?:@modelcontextprotcol|@modelcontextprotocolx)/server-(?:github|filesystem|memory|fetch|sequential-thinking)$'
+        flags: i
+    - json:
+        path: mcpServers.*.args.*
+        regex: '@modelcontextprotocol/server-(?:github|githuub|fileystem|filesytem|memroy|feth|sequential-thinkng)$'
+        flags: i
+fix: Confirm the exact official package scope and name before installing the MCP server.
+references:
+  - https://modelcontextprotocol.io/docs/getting-started/intro
+tags: [supply-chain, mcp, typosquat]
