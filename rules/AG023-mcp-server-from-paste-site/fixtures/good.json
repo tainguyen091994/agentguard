@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "published": {
+      "command": "npx",
+      "args": ["-y", "@example/mcp-server@1.2.3"]
+    },
+    "repository": {
+      "command": "node",
+      "args": ["./servers/example-mcp/dist/server.mjs"],
+      "source": "https://github.com/example/mcp-server"
+    }
+  }
+}
