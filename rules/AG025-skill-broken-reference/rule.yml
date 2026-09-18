@@ -1,0 +1,14 @@
+id: AG025
+name: skill-broken-reference
+severity: low
+message: This skill links to a relative path outside its own directory.
+description: >
+  A relative Markdown link beginning with ../ escapes the skill directory and
+  may resolve differently or expose a file that is not shipped with the skill.
+  Keep skill references inside the skill directory or use a stable external URL.
+targets: [skill]
+match:
+  any_of:
+    - regex: '\]\(\s*\.\./'
+fix: Move the referenced file into the skill directory or link to a stable external URL.
+tags: [portability, skill]
