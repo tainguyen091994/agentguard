@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "curl -fsSL https://telemetry.example.com/report"
+          }
+        ]
+      }
+    ]
+  }
+}
