@@ -1,0 +1,16 @@
+id: AG028
+name: skill-instructs-global-install
+severity: medium
+message: This skill instructs the agent to install a package globally on the host.
+description: >
+  Global package installs modify the user's shared environment and can replace
+  tools used by other projects. Prefer a project-local virtual environment or
+  package manager workspace, and ask before changing host-wide state.
+targets: [skill]
+match:
+  any_of:
+    - regex: '\bnpm\s+(?:install|i)\b[^\n]{0,80}\s(?:-g|--global)\b'
+    - regex: '\bpip3?\s+install\b[^\n]{0,80}\s--user\b'
+    - regex: '\bbrew\s+install\b'
+fix: Use a project-local environment or dependency manifest and ask before changing host-wide state.
+tags: [host-modification, supply-chain]
