@@ -1,0 +1,14 @@
+id: AG030
+name: plugin-bundles-binary
+severity: high
+message: This extension bundles a native executable library.
+description: >
+  Native binaries inside agent extension folders bypass normal package review
+  and may behave differently on each platform. Prefer a signed, pinned
+  dependency or a documented source build outside the extension bundle.
+targets: [any]
+match:
+  any_of:
+    - filename: '(?:^|/)(?:\.claude|\.grok|\.claude-plugin|\.grok-plugin|skills|plugins|agents)/.*\.(?:exe|dll|so|dylib)$'
+fix: Remove the bundled native binary and use a signed, pinned dependency or a documented source build.
+tags: [supply-chain, native-code]
