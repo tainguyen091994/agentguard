@@ -1,0 +1,21 @@
+id: AG022
+name: mcp-http-transport-without-auth
+severity: medium
+message: This remote MCP endpoint has no authentication header.
+description: >
+  A remote MCP endpoint without an authentication header can expose tools and
+  data to anyone who reaches it. Keep local development endpoints separate and
+  configure an explicit credential for remote servers.
+targets: [mcp, settings]
+match:
+  any_of:
+    - json:
+        path: mcpServers.*.url
+        regex: '^https?://(?!localhost(?::|/)|127\.0\.0\.1(?::|/))'
+        sibling_missing: headers
+    - json:
+        path: mcpServers.*.serverUrl
+        regex: '^https?://(?!localhost(?::|/)|127\.0\.0\.1(?::|/))'
+        sibling_missing: headers
+fix: Add an authentication header backed by an environment variable before connecting to a remote MCP endpoint.
+tags: [mcp, transport, authentication]
