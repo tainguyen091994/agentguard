@@ -1,0 +1,14 @@
+id: AG033
+name: skill-oversized
+severity: low
+message: This skill is over 300 lines and may be too large for reliable agent routing.
+description: >
+  Very long skills consume context before the agent reaches the instructions that
+  matter. Split detailed material into focused reference files and keep the
+  entry-point skill concise.
+targets: [skill]
+match:
+  any_of:
+    - regex: '^(?:[^\n]*\n){300}'
+fix: Keep the entry-point skill under 300 lines and move detailed material into focused references.
+tags: [quality, context-window]
