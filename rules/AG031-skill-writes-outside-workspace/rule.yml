@@ -1,0 +1,16 @@
+id: AG031
+name: skill-writes-outside-workspace
+severity: high
+message: This skill instructs a write outside the agent workspace.
+description: >
+  Writes above the workspace root or into host-level directories can modify
+  unrelated projects and system configuration. Keep skill-created files inside
+  the workspace and ask before changing machine-wide state.
+targets: [skill]
+match:
+  any_of:
+    - regex: '(?:\b(?:tee|cp|mv|install|touch|mkdir|cat\s*>|echo\b[^\n]*>)\s+[^\n]*(?:\.\./){2,})'
+    - regex: '(?:\b(?:Set-Content|Out-File|Copy-Item|Move-Item|New-Item)\b\s+[^\n]*(?:\.\.\\){2,})'
+    - regex: '(?:\b(?:tee|cp|mv|install|touch|mkdir|cat\s*>|echo\b[^\n]*>)\s+)(?:/etc/|/var/|/usr/local/|/root/|~/\.(?:ssh|config)/)'
+fix: Keep writes inside the workspace and ask before changing host-level files.
+tags: [permissions, portability]
