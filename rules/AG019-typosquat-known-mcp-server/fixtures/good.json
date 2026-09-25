@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github@1.4.2"]
+    },
+    "gitlab": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-gitlab"]
+    },
+    "custom": {
+      "command": "npx",
+      "args": ["-y", "@acme/server-github"]
+    }
+  }
+}
