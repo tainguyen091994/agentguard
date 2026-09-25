@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "remote-tools": {
+      "url": "https://mcp.example.com/api/mcp",
+      "headers": {
+        "Authorization": "Bearer ${MCP_TOKEN}"
+      }
+    },
+    "local-tools": {
+      "url": "http://127.0.0.1:8765/mcp"
+    }
+  }
+}
