@@ -1,0 +1,18 @@
+{
+  "name": "example-marketplace",
+  "plugins": [
+    {
+      "name": "formatter",
+      "source": {
+        "url": "https://github.com/example/formatter",
+        "ref": "main"
+      }
+    },
+    {
+      "name": "linter",
+      "source": {
+        "url": "https://github.com/example/linter#v2.0.0"
+      }
+    }
+  ]
+}
