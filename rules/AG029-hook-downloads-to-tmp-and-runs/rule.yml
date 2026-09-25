@@ -1,0 +1,15 @@
+id: AG029
+name: hook-downloads-to-tmp-and-runs
+severity: high
+message: This hook downloads an executable to a temporary directory and runs it.
+description: >
+  Temporary directories are writable by other processes and make downloaded
+  code hard to review or attribute. Fetch approved dependencies into the
+  workspace, verify them, and execute them from a controlled path instead.
+targets: [hook]
+match:
+  any_of:
+    - regex: '(?:curl|wget)[\s\S]{0,320}(?:/tmp/|/var/tmp/)[\s\S]{0,160}chmod\s+\+x[\s\S]{0,120}(?:/tmp/|/var/tmp/)'
+    - regex: '(?:curl|Invoke-WebRequest)[\s\S]{0,320}(?:%TEMP%|\\Temp\\)[\s\S]{0,160}(?:Start-Process|&\s*(?:%TEMP%|\\Temp\\))'
+fix: Download to a controlled workspace path, verify the artifact, and avoid executing code from a temporary directory.
+tags: [code-execution, supply-chain]
