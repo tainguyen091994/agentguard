@@ -1,0 +1,17 @@
+id: AG023
+name: mcp-server-from-paste-site
+severity: high
+message: This MCP configuration fetches server code from a paste or raw file URL.
+description: >
+  Running server code from a gist, paste, or raw file gives the agent no stable
+  repository history or review boundary. Prefer a published, pinned package or
+  a repository-backed source that can be audited before installation.
+targets: [mcp, settings]
+match:
+  any_of:
+    - regex: '(?:gist\.githubusercontent\.com|pastebin\.com/raw/|raw\.githubusercontent\.com/)[^"\s<>{}]+'
+      flags: i
+fix: Use an audited package or a repository-backed source with a pinned version instead of executing pasted code.
+references:
+  - https://docs.github.com/en/repositories/creating-and-managing-repositories/duplicating-a-repository
+tags: [code-execution, supply-chain, mcp]
