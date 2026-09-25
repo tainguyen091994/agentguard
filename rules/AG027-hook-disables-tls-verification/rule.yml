@@ -1,0 +1,17 @@
+id: AG027
+name: hook-disables-tls-verification
+severity: high
+message: This hook or setting turns off TLS certificate verification.
+description: >
+  Disabling certificate verification lets an attacker on the network replace
+  downloads or API responses seen by the agent. Keep certificate checking on
+  and fix the trust chain instead of bypassing it.
+targets: [hook, settings]
+match:
+  any_of:
+    - regex: 'curl[^\n]{0,120}(?:--insecure|\s-k\b)'
+    - regex: 'NODE_TLS_REJECT_UNAUTHORIZED\s*=\s*0\b'
+fix: Fix the certificate chain or configure a trusted CA instead of disabling verification.
+references:
+  - https://curl.se/docs/sslcerts.html
+tags: [transport, hardening]
