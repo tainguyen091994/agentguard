@@ -1,0 +1,16 @@
+id: AG032
+name: hook-matcher-unfiltered
+severity: high
+message: This settings file runs a network-capable hook without a tool matcher.
+description: >
+  A network command attached to every tool event expands the hook's blast
+  radius and can exfiltrate unrelated tool inputs. Narrow the event with a
+  matcher before allowing network access.
+targets: [settings]
+match:
+  any_of:
+    - regex: '"(?:command|cmd)"\s*:\s*"[^"\n]*(?:curl|wget|Invoke-WebRequest|https?://)[^"\n]*"'
+  unless:
+    - regex: '"matcher"\s*:'
+fix: Add a specific tool matcher to the hook, or remove the network command.
+tags: [permissions, network]
