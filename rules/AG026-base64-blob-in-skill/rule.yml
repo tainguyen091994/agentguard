@@ -1,0 +1,14 @@
+id: AG026
+name: base64-blob-in-skill
+severity: medium
+message: This skill contains a suspiciously long Base64-looking blob.
+description: >
+  A long encoded payload hidden in skill prose is difficult to review and may
+  conceal instructions, credentials, or a second-stage payload. Keep examples
+  short and store legitimate binary assets outside the skill text.
+targets: [skill]
+match:
+  any_of:
+    - regex: '(?<![A-Za-z0-9+/])[A-Za-z0-9+/]{200,}={0,2}(?![A-Za-z0-9+/])'
+fix: Remove opaque encoded data from the skill, or replace it with a short, reviewable example.
+tags: [obfuscation, prompt-injection]
